@@ -11,7 +11,7 @@ export default {
       const githubUrl = new URL('https://api.github.com/search/repositories');
       githubUrl.search = url.search;
 
-      const headers: Record<string, string> = { 'Accept': 'application/vnd.github+json' };
+      const headers: Record<string, string> = { 'Accept': 'application/vnd.github+json', 'User-Agent': 'github-search-worker' };
       const token = env['GITHUB_TOKEN'] as string | undefined;
       if (token) headers['Authorization'] = `Bearer ${token}`;
 
