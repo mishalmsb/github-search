@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "ng build && npx esbuild dist/github-search/server/server.mjs --bundle --format=esm --outfile=dist/github-search/server/worker-bundle.mjs --external:node:* --define:import.meta.url='\"file:///app/worker.mjs\"' --minify",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:github-search": "node dist/github-search/server/server.mjs"
