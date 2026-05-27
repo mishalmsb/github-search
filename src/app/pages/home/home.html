@@ -1,0 +1,104 @@
+<app-navbar />
+
+<main class="min-h-screen">
+
+  <!-- Hero -->
+  <section class="relative py-24 px-4 sm:px-6 lg:px-8 text-center overflow-hidden">
+    <!-- Decorative corner marks -->
+    <span class="absolute top-6 left-6 text-border text-2xl select-none opacity-60">❧</span>
+    <span class="absolute top-6 right-6 text-border text-2xl select-none opacity-60 scale-x-[-1]">❧</span>
+
+    <div class="mx-auto max-w-3xl">
+      <!-- Ornament -->
+      <p class="text-sepia/60 tracking-[0.5em] text-xs uppercase mb-6 font-body">
+        ── ✦ ──
+      </p>
+
+      <h1 class="font-display text-5xl sm:text-6xl font-bold text-ink leading-tight mb-6">
+        GitHub<br>
+        <span class="text-sepia italic">Search</span>
+      </h1>
+
+      <p class="font-body text-xl text-ink-muted leading-relaxed mb-10 max-w-xl mx-auto">
+        Discover open-source repositories across languages and frameworks.
+        Browse by category or search for anything on GitHub.
+      </p>
+
+      <!-- CTA search bar -->
+      <form action="/search/angular" method="get" class="flex items-center max-w-md mx-auto gap-2">
+        <input
+          type="text"
+          name="_q"
+          placeholder="e.g. angular, spring-boot, react…"
+          class="flex-1 px-4 py-3 border border-border rounded-sm bg-paper text-ink placeholder:text-ink-muted/50 focus:outline-none focus:border-sepia focus:ring-1 focus:ring-sepia/20 text-base"
+          id="hero-search"
+        />
+        <a id="hero-btn"
+           href="#"
+           onclick="event.preventDefault(); var q=document.getElementById('hero-search').value.trim(); if(q) window.location='/search/'+encodeURIComponent(q);"
+           class="px-5 py-3 bg-sepia text-paper font-medium rounded-sm hover:bg-sepia/80 transition-colors text-base whitespace-nowrap cursor-pointer">
+          Search
+        </a>
+      </form>
+
+      <p class="text-xs text-ink-muted/60 mt-4">
+        Powered by the GitHub Search API &mdash; unauthenticated (60 req/hr)
+      </p>
+    </div>
+
+    <!-- Bottom ornament -->
+    <div class="absolute bottom-0 left-0 right-0 flex items-center gap-0">
+      <div class="flex-1 border-t border-dashed border-border/50"></div>
+      <span class="text-border/50 px-4 text-sm select-none">◈</span>
+      <div class="flex-1 border-t border-dashed border-border/50"></div>
+    </div>
+  </section>
+
+  <!-- Categories -->
+  <section class="py-16 px-4 sm:px-6 lg:px-8">
+    <div class="mx-auto max-w-4xl">
+      <h2 class="font-display text-2xl font-bold text-ink text-center mb-2">Browse Categories</h2>
+      <p class="text-center text-sm text-ink-muted mb-10">Curated collections of top repositories</p>
+
+      <div class="grid sm:grid-cols-2 gap-5">
+        @for (cat of categories; track cat.slug) {
+          <a [routerLink]="['/' + cat.slug]"
+             class="group block border border-border rounded-sm p-6 bg-paper hover:bg-paper-dark hover:border-sepia/60 hover:shadow-md transition-all">
+            <div class="flex items-start gap-4">
+              <div class="w-12 h-12 rounded-sm border border-border/60 flex items-center justify-center
+                          font-display text-xl font-bold text-sepia bg-sepia/5 flex-shrink-0
+                          group-hover:bg-sepia group-hover:text-paper transition-colors">
+                {{ cat.icon }}
+              </div>
+              <div>
+                <h3 class="font-display text-lg font-semibold text-ink group-hover:text-sepia transition-colors">
+                  {{ cat.label }}
+                </h3>
+                <p class="text-sm text-ink-muted mt-1 leading-relaxed">{{ cat.description }}</p>
+              </div>
+            </div>
+          </a>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Feature strip -->
+  <section class="py-14 px-4 sm:px-6 lg:px-8 border-t border-dashed border-border/60">
+    <div class="mx-auto max-w-4xl grid sm:grid-cols-3 gap-8 text-center">
+      <div>
+        <p class="font-display text-2xl font-bold text-sepia mb-1">SSR</p>
+        <p class="text-sm text-ink-muted">Each page is server-rendered for fast initial load and SEO-ready canonical tags.</p>
+      </div>
+      <div>
+        <p class="font-display text-2xl font-bold text-sepia mb-1">Cached</p>
+        <p class="text-sm text-ink-muted">Cloudflare caches each <code class="text-xs bg-paper-dark px-1 rounded">?page=</code> independently, ignoring other query params.</p>
+      </div>
+      <div>
+        <p class="font-display text-2xl font-bold text-sepia mb-1">Load More</p>
+        <p class="text-sm text-ink-muted">Load additional pages on demand. Deep links pre-load all previous pages on the client.</p>
+      </div>
+    </div>
+  </section>
+
+</main>

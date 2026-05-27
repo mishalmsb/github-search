@@ -1,0 +1,68 @@
+<app-navbar />
+
+<main class="min-h-screen py-14 px-4 sm:px-6 lg:px-8">
+  <div class="mx-auto max-w-2xl">
+
+    <!-- Title -->
+    <header class="mb-10 text-center">
+      <p class="text-sepia/60 tracking-[0.5em] text-xs uppercase mb-4">── ✦ ──</p>
+      <h1 class="font-display text-4xl font-bold text-ink mb-3">About GitHub Search</h1>
+      <div class="w-16 border-t border-sepia/40 mx-auto"></div>
+    </header>
+
+    <!-- Content -->
+    <article class="font-body text-lg text-ink-muted leading-relaxed space-y-6">
+
+      <p>
+        <strong class="text-ink font-semibold">GitHub Search</strong> is a demonstration application
+        built to test and showcase <strong class="text-ink font-semibold">Cloudflare Pages caching</strong>
+        behavior with server-side rendered Angular pages.
+      </p>
+
+      <h2 class="font-display text-2xl font-bold text-ink pt-2">How Caching Works</h2>
+      <p>
+        When you navigate to a search or category page, the URL's <code class="text-sm bg-paper-dark text-ink px-1.5 py-0.5 rounded-sm">?page=</code>
+        parameter is the only query string that Cloudflare uses as part of its cache key. All other
+        parameters (sort, order, etc.) are ignored when computing the cache entry.
+      </p>
+      <p>
+        This means <code class="text-sm bg-paper-dark text-ink px-1.5 py-0.5 rounded-sm">/search/angular?page=2</code>
+        and <code class="text-sm bg-paper-dark text-ink px-1.5 py-0.5 rounded-sm">/search/angular?page=2&amp;sort=forks</code>
+        resolve to the <em>same cached response</em>. The first request is rendered by the server
+        and stored; subsequent requests within the TTL are served instantly from cache.
+      </p>
+
+      <h2 class="font-display text-2xl font-bold text-ink pt-2">SSR + Load More</h2>
+      <p>
+        When a search page is opened directly (e.g. <code class="text-sm bg-paper-dark text-ink px-1.5 py-0.5 rounded-sm">/angular?page=3</code>),
+        the <strong class="text-ink">server renders page 3 results</strong> in the HTML. After
+        the page hydrates in the browser, Angular loads pages 1 through 3 in parallel and replaces
+        the view with the full accumulated list. This means the "Load More" button can continue
+        from page 4 without gaps.
+      </p>
+
+      <h2 class="font-display text-2xl font-bold text-ink pt-2">Canonical Tags &amp; SEO</h2>
+      <p>
+        Each page sets a canonical <code class="text-sm bg-paper-dark text-ink px-1.5 py-0.5 rounded-sm">&lt;link rel="canonical"&gt;</code>:
+        page 1 uses the clean path, pages 2+ include the <code class="text-sm bg-paper-dark text-ink px-1.5 py-0.5 rounded-sm">?page=N</code>
+        parameter. The canonical updates dynamically when additional pages are loaded via the
+        "Load More" button.
+      </p>
+
+      <h2 class="font-display text-2xl font-bold text-ink pt-2">Tech Stack</h2>
+      <ul class="list-none space-y-2 pl-0">
+        @for (item of techStack; track item.label) {
+          <li class="flex items-baseline gap-2">
+            <span class="text-sepia text-xs">◈</span>
+            <span><strong class="text-ink font-medium">{{ item.label }}</strong> &mdash; {{ item.desc }}</span>
+          </li>
+        }
+      </ul>
+
+      <div class="pt-6 text-center border-t border-dashed border-border/60">
+        <a routerLink="/" class="text-sepia hover:underline font-medium">← Back to Home</a>
+      </div>
+
+    </article>
+  </div>
+</main>

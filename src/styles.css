@@ -1,3 +1,76 @@
 /* You can add global styles to this file, and also import other style files */
 
 @import 'tailwindcss';
+
+/* ── Tailwind v4 custom theme ────────────────────────────────────────────── */
+@theme {
+  /* Paper palette */
+  --color-paper:        #f5f0e1;
+  --color-paper-dark:   #ece5d0;
+  --color-paper-darker: #d9cfb3;
+
+  /* Ink (text) palette */
+  --color-ink:          #1c1008;
+  --color-ink-muted:    #4a3520;
+
+  /* Accent / sepia */
+  --color-sepia:        #7c5320;
+  --color-sepia-light:  #b87d3a;
+
+  /* Borders and accent */
+  --color-border:       #c5b08a;
+  --color-accent:       #8b2020;
+
+  /* Typography */
+  --font-display: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  --font-body:    'Crimson Pro', Georgia, serif;
+}
+
+/* ── Base reset ───────────────────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* ── Paper background & typography defaults ──────────────────────────────── */
+body {
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.75;
+  /* Subtle aged-paper texture via layered gradients */
+  background-image:
+    radial-gradient(ellipse at 15% 20%, rgba(195, 165, 105, 0.18) 0%, transparent 55%),
+    radial-gradient(ellipse at 85% 80%, rgba(195, 165, 105, 0.14) 0%, transparent 55%),
+    radial-gradient(ellipse at 50% 50%, rgba(255, 252, 238, 0.55) 0%, transparent 70%);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  color: var(--color-ink);
+  line-height: 1.25;
+}
+
+/* ── Utilities not covered by Tailwind tokens ────────────────────────────── */
+.font-display { font-family: var(--font-display); }
+.font-body    { font-family: var(--font-body); }
+
+/* Smooth animate-spin for the load-more spinner */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+.animate-spin { animation: spin 0.8s linear infinite; }
+
+/* Pulse for skeleton loaders */
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.45; }
+}
+.animate-pulse { animation: pulse 1.6s ease-in-out infinite; }
+

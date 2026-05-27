@@ -1,0 +1,20 @@
+/*
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+
+/search/*
+  Cache-Control: public, s-maxage=3600, stale-while-revalidate=86400, max-age=0
+  Vary: Accept-Encoding
+
+/angular
+  Cache-Control: public, s-maxage=3600, stale-while-revalidate=86400, max-age=0
+  Vary: Accept-Encoding
+
+/java
+  Cache-Control: public, s-maxage=3600, stale-while-revalidate=86400, max-age=0
+  Vary: Accept-Encoding
+
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable

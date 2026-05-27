@@ -1,0 +1,152 @@
+<app-navbar />
+
+<main class="min-h-screen">
+  <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-10">
+
+    <!-- Page header -->
+    <header class="mb-8 border-b border-border pb-6">
+      <div class="flex items-start justify-between gap-4 flex-wrap">
+        <div>
+          <h1 class="font-display text-3xl font-bold text-ink">
+            {{ displayTitle() }}
+            @if (isCategory()) {
+              <span class="ml-2 text-sm font-normal text-sepia border border-sepia/40 px-2 py-0.5 rounded-sm align-middle">
+                Category
+              </span>
+            }
+          </h1>
+          @if (store.totalCount() > 0) {
+            <p class="mt-1 text-sm text-ink-muted">
+              {{ store.totalCount() | number }} repositories found
+              &mdash; showing {{ store.repos().length }}
+              @if (store.loadedMaxPage() > 1) {
+                <span class="text-sepia"> (pages 1&ndash;{{ store.loadedMaxPage() }})</span>
+              }
+            </p>
+          }
+        </div>
+
+        <!-- Sort controls -->
+        @if (!store.isLoading() && store.repos().length > 0) {
+          <div class="flex items-center gap-2 flex-wrap">
+            <label class="text-xs text-ink-muted">Sort:</label>
+            <select
+              [value]="sort()"
+              (change)="changeSort($any($event.target).value)"
+              class="text-sm border border-border rounded-sm bg-paper text-ink px-2 py-1 focus:outline-none focus:border-sepia cursor-pointer">
+              @for (opt of sortOptions; track opt.value) {
+                <option [value]="opt.value">{{ opt.label }}</option>
+              }
+            </select>
+            <select
+              [value]="order()"
+              (change)="changeOrder($any($event.target).value)"
+              class="text-sm border border-border rounded-sm bg-paper text-ink px-2 py-1 focus:outline-none focus:border-sepia cursor-pointer">
+              <option value="desc">Descending</option>
+              <option value="asc">Ascending</option>
+            </select>
+          </div>
+        }
+      </div>
+    </header>
+
+    <!-- Loading skeleton -->
+    @if (store.isLoading()) {
+      <div class="space-y-4">
+        @for (_ of [1,2,3,4,5]; track $index) {
+          <div class="border border-border rounded-sm p-5 animate-pulse">
+            <div class="flex gap-3">
+              <div class="w-9 h-9 rounded-full bg-paper-darker flex-shrink-0"></div>
+              <div class="flex-1 space-y-2">
+                <div class="h-4 bg-paper-darker rounded w-2/5"></div>
+                <div class="h-3 bg-paper-darker rounded w-1/5"></div>
+              </div>
+            </div>
+            <div class="mt-3 space-y-1.5">
+              <div class="h-3 bg-paper-darker rounded w-full"></div>
+              <div class="h-3 bg-paper-darker rounded w-3/4"></div>
+            </div>
+          </div>
+        }
+      </div>
+    }
+
+    <!-- Error state -->
+    @if (store.error()) {
+      <div class="border border-accent/40 bg-accent/5 rounded-sm p-6 text-center">
+        <p class="font-display text-lg text-accent mb-1">Something went wrong</p>
+        <p class="text-sm text-ink-muted">{{ store.error() }}</p>
+        <p class="text-xs text-ink-muted/70 mt-3">
+          GitHub's unauthenticated API allows 60 requests per hour. Try again shortly.
+        </p>
+      </div>
+    }
+
+    <!-- Empty state (query set but no results) -->
+    @if (store.isEmpty()) {
+      <div class="text-center py-20">
+        <p class="font-display text-2xl text-ink/40 mb-2">No repositories found</p>
+        <p class="text-sm text-ink-muted">Try a different search term.</p>
+      </div>
+    }
+
+    <!-- No query state -->
+    @if (!query() && !store.isLoading()) {
+      <div class="text-center py-20">
+        <p class="font-display text-2xl text-ink/40 mb-2">What are you looking for?</p>
+        <p class="text-sm text-ink-muted">Use the search bar above to explore GitHub repositories.</p>
+      </div>
+    }
+
+    <!-- Results grouped by page -->
+    @if (!store.isLoading() && store.resultPages().length > 0) {
+      <div class="space-y-8">
+        @for (group of store.resultPages(); track group.page) {
+
+          <!-- Page separator (shown for pages 2+) -->
+          @if (group.page > 1) {
+            <div class="flex items-center gap-3 my-6">
+              <div class="flex-1 border-t border-dashed border-border"></div>
+              <span class="text-xs font-medium text-sepia/70 bg-paper px-3 py-0.5 border border-sepia/30 rounded-sm">
+                Page {{ group.page }}
+              </span>
+              <div class="flex-1 border-t border-dashed border-border"></div>
+            </div>
+          }
+
+          <div class="grid gap-4">
+            @for (repo of group.repos; track repo.id) {
+              <app-repo-card [repo]="repo" />
+            }
+          </div>
+        }
+      </div>
+
+      <!-- Load More / End of results -->
+      <div class="mt-10 text-center">
+        @if (store.hasMore()) {
+          <button
+            type="button"
+            [disabled]="store.isLoadingMore()"
+            (click)="loadMore()"
+            class="inline-flex items-center gap-2 px-6 py-2.5 border border-sepia text-sepia font-medium text-sm rounded-sm hover:bg-sepia hover:text-paper transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+            @if (store.isLoadingMore()) {
+              <svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+              </svg>
+              Loading page {{ store.loadedMaxPage() + 1 }}…
+            } @else {
+              Load More
+              <span class="text-xs opacity-70">(page {{ store.loadedMaxPage() + 1 }})</span>
+            }
+          </button>
+        } @else if (store.repos().length > 0) {
+          <p class="text-sm text-ink-muted/60 italic">
+            ✦ &nbsp; All {{ store.repos().length }} results loaded &nbsp; ✦
+          </p>
+        }
+      </div>
+    }
+
+  </div>
+</main>

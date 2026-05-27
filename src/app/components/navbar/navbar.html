@@ -1,0 +1,103 @@
+<nav class="sticky top-0 z-50 border-b border-border bg-paper/95 backdrop-blur-sm shadow-sm">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="flex h-16 items-center justify-between gap-4">
+
+      <!-- Logo -->
+      <a routerLink="/"
+         class="flex-shrink-0 font-display text-xl font-bold text-ink tracking-tight hover:text-sepia transition-colors"
+         (click)="closeMobileMenu()">
+        <span class="text-sepia">◈</span> GitHub Search
+      </a>
+
+      <!-- Desktop Nav links -->
+      <div class="hidden md:flex items-center gap-1">
+        <a routerLink="/"
+           routerLinkActive="text-sepia font-semibold"
+           [routerLinkActiveOptions]="{ exact: true }"
+           class="px-3 py-1.5 text-sm font-medium text-ink-muted hover:text-ink transition-colors rounded-sm hover:bg-paper-dark">
+          Home
+        </a>
+        @for (cat of categories; track cat.slug) {
+          <a [routerLink]="['/' + cat.slug]"
+             routerLinkActive="text-sepia font-semibold"
+             class="px-3 py-1.5 text-sm font-medium text-ink-muted hover:text-ink transition-colors rounded-sm hover:bg-paper-dark">
+            {{ cat.label }}
+          </a>
+        }
+        <a routerLink="/about"
+           routerLinkActive="text-sepia font-semibold"
+           class="px-3 py-1.5 text-sm font-medium text-ink-muted hover:text-ink transition-colors rounded-sm hover:bg-paper-dark">
+          About
+        </a>
+      </div>
+
+      <!-- Search bar -->
+      <form (ngSubmit)="onSearch()" class="hidden sm:flex items-center flex-1 max-w-xs">
+        <div class="relative w-full">
+          <input
+            type="search"
+            name="q"
+            [value]="searchInput()"
+            (input)="searchInput.set($any($event.target).value)"
+            placeholder="Search repositories…"
+            class="w-full rounded-sm border border-border bg-paper pl-3 pr-10 py-1.5 text-sm text-ink placeholder:text-ink-muted/60 focus:outline-none focus:border-sepia focus:ring-1 focus:ring-sepia/30 transition"
+          />
+          <button type="submit"
+                  class="absolute right-2 top-1/2 -translate-y-1/2 text-ink-muted hover:text-sepia transition-colors"
+                  aria-label="Search">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z"/>
+            </svg>
+          </button>
+        </div>
+      </form>
+
+      <!-- Mobile menu button -->
+      <button type="button"
+              class="md:hidden p-2 text-ink-muted hover:text-ink"
+              (click)="toggleMobileMenu()"
+              aria-label="Toggle menu">
+        @if (mobileMenuOpen()) {
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        } @else {
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+        }
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile menu -->
+  @if (mobileMenuOpen()) {
+    <div class="md:hidden border-t border-border bg-paper-dark px-4 py-3 space-y-1">
+      <!-- Mobile search -->
+      <form (ngSubmit)="onSearch()" class="flex items-center gap-2 mb-3">
+        <input
+          type="search"
+          name="q"
+          [value]="searchInput()"
+          (input)="searchInput.set($any($event.target).value)"
+          placeholder="Search repositories…"
+          class="flex-1 rounded-sm border border-border bg-paper px-3 py-1.5 text-sm text-ink placeholder:text-ink-muted/60 focus:outline-none focus:border-sepia"
+        />
+        <button type="submit"
+                class="px-3 py-1.5 bg-sepia text-paper text-sm rounded-sm hover:bg-sepia/80 transition-colors">
+          Go
+        </button>
+      </form>
+      <a routerLink="/" (click)="closeMobileMenu()"
+         class="block px-2 py-1.5 text-sm font-medium text-ink-muted hover:text-ink">Home</a>
+      @for (cat of categories; track cat.slug) {
+        <a [routerLink]="['/' + cat.slug]" (click)="closeMobileMenu()"
+           class="block px-2 py-1.5 text-sm font-medium text-ink-muted hover:text-ink">
+          {{ cat.label }}
+        </a>
+      }
+      <a routerLink="/about" (click)="closeMobileMenu()"
+         class="block px-2 py-1.5 text-sm font-medium text-ink-muted hover:text-ink">About</a>
+    </div>
+  }
+</nav>

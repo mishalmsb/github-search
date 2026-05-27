@@ -6,7 +6,7 @@
   },
   "newProjectRoot": "projects",
   "projects": {
-    "cloudflare-cache": {
+    "github-search": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -64,10 +64,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "cloudflare-cache:build:production"
+              "buildTarget": "github-search:build:production"
             },
             "development": {
-              "buildTarget": "cloudflare-cache:build:development"
+              "buildTarget": "github-search:build:development"
             }
           },
           "defaultConfiguration": "development"
