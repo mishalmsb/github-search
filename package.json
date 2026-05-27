@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build && npx esbuild dist/github-search/server/server.mjs --bundle --format=esm --outfile=dist/github-search/browser/_worker.js --minify --external:node:*",
+    "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:github-search": "node dist/github-search/server/server.mjs"
